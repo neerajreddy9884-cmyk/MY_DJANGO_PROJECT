@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Shopping Cart</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f6f9; margin: 0; padding: 0; color: #333; }
+        .navbar { background-color: #1a1a1a; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .navbar-brand { color: #fff; font-size: 20px; font-weight: bold; text-decoration: none; }
+        .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
+        h2 { font-size: 28px; margin-bottom: 25px; color: #222; }
+        .cart-card { background: #fff; border-radius: 8px; padding: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #eef2f5; }
+        .cart-table { width: 100%; border-collapse: collapse; text-align: left; }
+        .cart-table th { padding: 12px; border-bottom: 2px solid #eef2f5; color: #7f8c8d; font-size: 14px; text-transform: uppercase; }
+        .cart-table td { padding: 15px 12px; border-bottom: 1px solid #eef2f5; font-size: 16px; }
+        .product-title { color: #2c3e50; font-weight: 600; }
+        .btn { padding: 8px 16px; border-radius: 4px; text-decoration: none; font-size: 14px; font-weight: 500; display: inline-block; cursor: pointer; border: none; }
+        .btn-danger { background-color: #dc3545; color: white; }
+        .btn-danger:hover { background-color: #c82333; }
+        .btn-primary { background-color: #007bff; color: white; font-size: 16px; padding: 12px 24px; border-radius: 5px; }
+        .btn-primary:hover { background-color: #0069d9; }
+        .btn-outline { border: 1px solid #007bff; color: #007bff; background: transparent; padding: 10px 20px; border-radius: 5px; }
+        .cart-summary { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; padding-top: 20px; border-top: 2px solid #eef2f5; }
+        .total-price { color: #2ec4b6; font-size: 24px; font-weight: bold; }
+        .alert-empty { background: #e3f2fd; color: #0d47a1; padding: 30px; border-radius: 8px; text-align: center; border: 1px solid #bbdefb; }
+    </style>
+</head>
+<body>
+
+    <!-- Simple Navigation Header Area -->
+    <nav class="navbar">
+        <a class="navbar-brand" href="{% url 'store:product_list' %}">📱 Back to Catalog</a>
+    </nav>
+
+    <!-- Main Shopping Cart Display Container -->
+    <div class="container">
+        <h2>Your Shopping Cart</h2>
+        
+        {% if cart_items %}
+            <div class="cart-card">
+                <table class="cart-table">
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in cart_items %}
+                        <tr>
+                            <td class="product-title">{{ item.product.name }}</td>
+                            <td><strong>{{ item.quantity }}</strong></td>
+                            <td>${{ item.product.price }}</td>
+                            <td><strong>${{ item.total_price }}</strong></td>
+                            <td>
+                                <a href="{% url 'store:remove_from_cart' item.id %}" class="btn btn-danger">Remove</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                <div class="cart-summary">
+                    <div>
+                        <span style="font-size: 18px; color: #7f8c8d;">Grand Total:</span>
+                        <div class="total-price">${{ total }}</div>
+                    </div>
+                    <a href="{% url 'store:checkout' %}" class="btn btn-primary">Proceed to Checkout</a>
+                </div>
+            </div>
+        {% else %}
+            <div class="alert-empty">
+                <h3 style="margin: 0 0 10px 0;">Your shopping cart is currently empty!</h3>
+                <p style="margin: 0 0 20px 0; color: #546e7a;">Add some tech items from our shop floor gallery first.</p>
+                <a href="{% url 'store:product_list' %}" class="btn btn-outline">Browse Products</a>
+            </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>

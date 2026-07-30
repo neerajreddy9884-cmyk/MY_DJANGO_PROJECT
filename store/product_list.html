@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>My E-Commerce Store</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f8f9fa; margin: 0; padding: 40px 20px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { color: #1a1a1a; margin-bottom: 30px; font-weight: 700; border-bottom: 2px solid #0d6efd; padding-bottom: 10px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; }
+        .product-card { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between; }
+        .product-name { font-size: 20px; font-weight: 600; margin: 0 0 10px 0; }
+        .product-name a { color: #212529; text-decoration: none; }
+        .product-name a:hover { color: #0d6efd; text-decoration: underline; }
+        .product-desc { color: #6c757d; font-size: 14px; margin-bottom: 15px; line-height: 1.4; }
+        .product-price { font-size: 22px; font-weight: 700; color: #0d6efd; margin-bottom: 15px; }
+        .badge { display: inline-block; padding: 4px 8px; font-size: 12px; font-weight: bold; border-radius: 4px; text-transform: uppercase; margin-bottom: 15px; width: fit-content; }
+        .badge-in-stock { background-color: #d1e7dd; color: #0f5132; }
+        .badge-out-stock { background-color: #f8d7da; color: #842029; }
+        .buy-btn { background-color: #212529; color: white; border: none; padding: 10px; width: 100%; border-radius: 6px; font-weight: 600; cursor: pointer; }
+        .buy-btn:hover { background-color: #000; }
+        .nav-link { display: inline-block; margin-bottom: 20px; color: #0d6efd; text-decoration: none; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="http://127.0.0" class="nav-link">← Back to Task Manager</a>
+        <h1>Digital Storefront</h1>
+        <div class="product-grid">
+            {% for product in products %}
+                <div class="product-card">
+                    <div>
+                        <!-- Interactive Title Link to Details Page -->
+                        <h3 class="product-name">
+                            <a href="{% url 'product_detail' product.id %}">
+                                {{ product.name }} →
+                            </a>
+                        </h3>
+                        <p class="product-desc">{{ product.description|default:"No description provided." }}</p>
+                    </div>
+                    <div>
+                        <div class="product-price">${{ product.price }}</div>
+                        {% if product.stock > 0 %}
+                            <span class="badge badge-in-stock">In Stock ({{ product.stock }})</span>
+                        {% else %}
+                            <span class="badge badge-out-stock">Out of Stock</span>
+                        {% endif %}
+                        <button class="buy-btn">Add to Cart</button>
+                    </div>
+                </div>
+            {% empty %}
+                <p style="color: gray; grid-column: 1/-1; text-align: center;">No products available inside the store backend database yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

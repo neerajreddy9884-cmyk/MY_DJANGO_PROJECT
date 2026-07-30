@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Online Shop Catalog</title>
+    <style>
+        /* Built-in styling to make the store look great without internet dependencies */
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f6f9; margin: 0; padding: 0; color: #333; }
+        .navbar { background-color: #1a1a1a; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .navbar-brand { color: #fff; font-size: 20px; font-weight: bold; text-decoration: none; }
+        .nav-links { display: flex; align-items: center; gap: 15px; }
+        .user-welcome { color: #fff; font-size: 14px; }
+        .btn { padding: 8px 16px; border-radius: 4px; text-decoration: none; font-size: 14px; font-weight: 500; display: inline-block; cursor: pointer; border: none; }
+        .btn-cart { background-color: #ffc107; color: #000; }
+        .btn-logout { background-color: transparent; color: #dc3545; border: 1px solid #dc3545; }
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        h2 { font-size: 28px; margin-bottom: 30px; color: #222; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 25px; }
+        .product-card { background: #fff; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #eef2f5; transition: transform 0.2s; }
+        .product-card:hover { transform: translateY(-5px); }
+        .product-name { font-size: 18px; margin: 0 0 10px 0; color: #2c3e50; font-weight: 600; }
+        .product-price { font-size: 22px; color: #2ec4b6; font-weight: bold; margin: 5px 0 15px 0; }
+        .product-stock { font-size: 13px; color: #7f8c8d; margin-bottom: 20px; }
+        .btn-add { background-color: #007bff; color: white; text-align: center; margin-top: auto; padding: 10px; border-radius: 5px; }
+        .btn-disabled { background-color: #bdc3c7; color: #7f8c8d; text-align: center; margin-top: auto; padding: 10px; border-radius: 5px; pointer-events: none; }
+    </style>
+</head>
+<body>
+
+    <!-- Main Navigation Header Area -->
+    <nav class="navbar">
+        <a class="navbar-brand" href="{% url 'store:product_list' %}">📱 My E-Commerce Store</a>
+        <div class="nav-links">
+            {% if user.is_authenticated %}
+                <span class="user-welcome">Welcome, <strong>{{ user.username }}</strong>!</span>
+                <a href="{% url 'store:view_cart' %}" class="btn btn-cart">🛒 View Cart</a>
+                <a href="{% url 'logout' %}" class="btn btn-logout">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn btn-cart">Login</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- Main Dynamic Products Grid Display Container -->
+    <div class="container">
+        <h2>Available Products</h2>
+        <div class="products-grid">
+                       {% for product in products %}
+                <div class="product-card">
+                    
+                    <!-- 1. Product Image Handler Block -->
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 6px; margin-bottom: 15px;">
+                    {% else %}
+                        <div style="width: 100%; height: 200px; background-color: #eef2f5; display: flex; align-items: center; justify-content: center; border-radius: 6px; margin-bottom: 15px; color: #7f8c8d; font-size: 14px;">No Image Available</div>
+                    {% endif %}
+
+                    <!-- 2. Product Text Properties -->
+                    <h5 class="product-name">{{ product.name }}</h5>
+                    <p class="product-price">${{ product.price }}</p>
+                    <p class="product-stock">In Stock: {{ product.stock }} units available</p>
+                    
+                    <!-- 3. Availability and Add to Cart Action Buttons -->
+                    {% if product.stock > 0 %}
+                        <a href="{% url 'store:add_to_cart' product.id %}" class="btn btn-add">Add to Cart</a>
+                    {% else %}
+                        <div class="btn btn-disabled">Out of Stock</div>
+                    {% endif %}
+                    
+                </div>
+            {% empty %}
+                <p>No products available right now.</p>
+            {% endfor %}
+    </div>
+
+</body>
+</html>
