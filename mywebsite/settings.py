@@ -132,7 +132,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Scroll down to your stripe variables and change them to read from the file:
-STRIPE_PUBLIC_KEY = os.getenv('pk_test_51TypFtDkax90XlUgijTx0HjajVnQ5nBYJuaAwrIvbodcpgqI06tx0ZLJANsrtWmLQ6Z1fVyOqCEhb9hovo5r61hx00CmkOLksB')
-STRIPE_SECRET_KEY = os.getenv('sk_test_51TypFtDkax90XlUgn3xePyRcWuDKHZuahNLxwhsCJOq883DvwvbKfbmSIDIYpW5IiNzyljd1M1GAhMZKTbogOxJH001aoo5xeD')
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+# Scroll down to your stripe variables and change them to read from the file:
+STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY')
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
 STRIPE_PUBLIC_KEY = 'pk_test_51TypFtDkax90XlUgijTx0HjajVnQ5nBYJuaAwrIvbodcpgqI06tx0ZLJANsrtWmLQ6Z1fVyOqCEhb9hovo5r61hx00CmkOLksB'
 STRIPE_SECRET_KEY = 'sk_test_51TypFtDkax90XlUgn3xePyRcWuDKHZuahNLxwhsCJOq883DvwvbKfbmSIDIYpW5IiNzyljd1M1GAhMZKTbogOxJH001aoo5xeD'
